@@ -1,20 +1,34 @@
+<?php
+session_start();
+
+// Check if the admin is not logged in, redirect to login page
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: admin_login.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html>
+<head>
+    <script type="text/javascript" src="js/regStu.js"></script> 
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 <body>
 
 <h1>Stuff Management</h1>
+<img src="Stuff.png" alt="Stuff" width="120" height="120">
 
 
-<form method="post" action=admin_login.php>
-<input type="submit" name="submit" value="Log Out">
+<form method="post" action="LogOut.php">
+<input type="submit" name="submit" value="Log Out" class="button" >
 </form>
 
 <form method="post" action=dashboard.php>
-<input type="submit" name="submit" value="Go to Dashboard">
+<input type="submit" name="submit" value="Go to Dashboard" class="button">
 </form>
 
 
-<table>
+<table align="center" cellpadding="25" cellspacing="0" width="auto" border="1" >
 
 <tr>
     <th>User ID</th>
@@ -29,6 +43,7 @@
     <th>Mother's Name</th>
     <th>Email</th>
     <th>Password</th>
+    <th>Action</th>
    
 
 </tr>
@@ -52,7 +67,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        echo "<tr><td>". $row["User_ID"]."</td><td>". $row["First_Name"]."</td><td>". $row["Last_Name"]."</td><td>". $row["Gender"]."</td><td>". $row["DateOfBirth"]."</td><td>". $row["Blood_Group"]."</td><td>". $row["Religion"]."</td><td>". $row["NID"]."</td><td>". $row["Father_Name"]."</td><td>". $row["Mother_Name"]. "</td><td>". $row["Email"]."</td><td>". $row["Password_"]."</td><td>";
+        echo "<tr><td>". $row["User_ID"]."</td><td>". $row["First_Name"]."</td><td>". $row["Last_Name"]."</td><td>". $row["Gender"]."</td><td>". $row["DateOfBirth"]."</td><td>". $row["Blood_Group"]."</td><td>". $row["Religion"]."</td><td>". $row["NID"]."</td><td>". $row["Father_Name"]."</td><td>". $row["Mother_Name"]. "</td><td>". $row["Email"]."</td><td>". $row["Password_"]."</td>";
         echo "<td><a href=\"updateStuff.php?User_ID=$row[User_ID]\">Edit</a> | 
         <a href=\"delStuff.php?User_ID=$row[User_ID]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a></td>";
     } 
@@ -152,10 +167,10 @@ function test_input($data) {
 
 
 <table>
-    <fieldset>
-                        <legend>Insert Stuff infortmation</legend>
+<fieldset>
+<legend>Insert Stuff infortmation</legend>
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" onsubmit="return registration()" novalidate>
   <label for="fstname">First name:</label>
   <input type="text" name="fstname" id="fstname" value="<?php echo $fstname; ?>">
   <span class="error"><?php echo $fstnameErr; ?></span>
@@ -166,7 +181,7 @@ function test_input($data) {
   <span class="error"><?php echo $lstnameErr; ?></span>
   <br><br>
 
-  <p><b>Gender : </b></p>
+  <p>Gender :</p>
   <input type="radio" id="Male" name="gender" value="Male" <?php if ($gender === "Male") echo "checked"; ?>>
   <label for="Male">Male</label><br>
   <input type="radio" id="Female" name="gender" value="Female" <?php if ($gender === "Female") echo "checked"; ?>>
@@ -183,6 +198,7 @@ function test_input($data) {
 
   <label for="bg">Blood Group: </label>
     <select name="bg" id="bg" placeholder="Select..." required>
+    <option value="" selected>Select Blood Group</option>
     <option value="A+">A+</option>
     <option value="A-">A-</option>
     <option value="B+">B+</option>
@@ -193,9 +209,10 @@ function test_input($data) {
     <option value="O+">0+</option>
     </select><br>
 
-  <label for="Religion"><b>Religion :</b></label>
+  <label for="Religion">Religion :</label>
     <select id="religion" name="religion" placeholder="Select..." required>
-    <option value="Muslim">Muslim</option>
+    <option value="" selected>Select Religion</option>
+    <option value="Islam">Islam</option>
     <option value="Hindu">Hindu</option>
     <option value="Christian">Christian</option>
     <option value="Buddha">Buddha</option>
@@ -203,8 +220,7 @@ function test_input($data) {
     </select>
 
 
-  <label for="nid">NID :</label>
-  <input type="number" name="nid" id="nid" value="<?php echo $nid; ?>">
+  <label for="nid">NID :</label>&nbsp;<input type="number" name="nid" id="nid" value="<?php echo $nid; ?>">
   <span class="error"><?php echo $nidErr; ?></span>
   <br><br>
 
@@ -231,20 +247,19 @@ function test_input($data) {
 
 
 
-  <input type="submit" name="submit" value="Insert Stuff">
+  <input type="submit" name="submit" value="Insert Stuff" class="button">
 </form>
 </table>
-                       
-                    </fieldset>
+</fieldset>
 
 
 
 
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $fstnameErr == "" && $lstnameErr == "" && $genderErr == "" && $DoBErr == "" && $bgErr == "" && $religionErr == "" && $nidErr == "" && $fnameErr == "" && $mnameErr == "" && $ssc_gpaErr == "" && $hsc_gpaErr == "" && $bsc_cgpaErr == "" && $msc_cgpaErr == "" && $emailErr == "" && $pwdErr == "") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $fstnameErr == "" && $lstnameErr == "" && $genderErr == "" && $DoBErr == "" && $bgErr == "" && $religionErr == "" && $nidErr == "" && $fnameErr == "" && $mnameErr == "" && $emailErr == "" && $pwdErr == "") {
 
     // Insert data into the database
-    $sql = "INSERT INTO student ( First_Name,Last_Name, Gender, DateOfBirth, Blood_Group, Religion, NID, Father_Name, Mother_Name, SSC_gpa, HSC_gpa, Email, Password_, Dept) VALUES ('$fstname', '$lstname', '$gender', '$DoB', '$bg', '$religion', '$nid', '$fname', '$mname', '$ssc_gpa', '$hsc_gpa', '$bsc_cgpa', '$msc_cgpa', '$email', '$pwd')";
+    $sql = "INSERT INTO student ( First_Name,Last_Name, Gender, DateOfBirth, Blood_Group, Religion, NID, Father_Name, Mother_Name, SSC_gpa, HSC_gpa, Email, Password_, Dept) VALUES ('$fstname', '$lstname', '$gender', '$DoB', '$bg', '$religion', '$nid', '$fname', '$mname', '$email', '$pwd')";
     if ($conn->query($sql) === true) {
         echo "Data inserted sucessfully";
         exit;
