@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 17, 2023 at 09:09 PM
+-- Generation Time: Dec 24, 2023 at 08:54 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `classtime`
+-- Table structure for table `course`
 --
 
-CREATE TABLE `classtime` (
+CREATE TABLE `course` (
   `CourseID` int(11) NOT NULL,
   `Course_Name` varchar(50) NOT NULL,
   `FacultyID` int(11) NOT NULL,
@@ -41,6 +41,13 @@ CREATE TABLE `classtime` (
   `Student_6` int(11) DEFAULT NULL,
   `Student_7` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `course`
+--
+
+INSERT INTO `course` (`CourseID`, `Course_Name`, `FacultyID`, `DateTime_1`, `DateTime_2`, `Student_1`, `Student_2`, `Student_3`, `Student_4`, `Student_5`, `Student_6`, `Student_7`) VALUES
+(2201, 'ABC', 5002, '2023-12-26', '2023-12-25', 1001, 1002, 1004, 1005, 1006, 1004, 1005);
 
 -- --------------------------------------------------------
 
@@ -80,6 +87,27 @@ INSERT INTO `faculty` (`User_ID`, `First_Name`, `Last_Name`, `Gender`, `DateOfBi
 (5015, 'Md Rased Hasan', 'Rokon', 'Male', '2023-11-25', 'A+', '', 2147483647, 'ACBD', 'ppppppppppppppp', 4.3, 4.11, 3.33, 3.13, 'rasedhasanrokon@gmail.com', '9999999999999', ''),
 (5018, 'Md Rased khan', 'Rokon', 'Male', '2023-11-28', 'A+', 'Islam', 2147483647, 'ACBD', 'ABCD', 4.3, 4.11, 3.33, 3.13, '21-44574-1@student.aiub.edu', '54654', 'FACULTY OF ENGINEERING'),
 (5019, 'Batman', 'b', 'Male', '2023-12-07', 'B+', 'Islam', 2147483647, 'g', 'ABCD', 4.3, 4.11, 3.33, 3.13, 'rashedrokon01@gmail.com', 'wwwwwwwwwwww', 'FACULTY OF ENGINEERING');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notice`
+--
+
+CREATE TABLE `notice` (
+  `User_ID` int(11) NOT NULL,
+  `Notice_Name` varchar(255) NOT NULL,
+  `NoticeFile` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notice`
+--
+
+INSERT INTO `notice` (`User_ID`, `Notice_Name`, `NoticeFile`) VALUES
+(1, 'Batman', 'notice.png'),
+(2, 'Batman', 'notice.png'),
+(3, 'Vacation', 'Vacation.pdf');
 
 -- --------------------------------------------------------
 
@@ -154,9 +182,9 @@ INSERT INTO `stuff` (`User_ID`, `First_Name`, `Last_Name`, `Gender`, `DateOfBirt
 --
 
 --
--- Indexes for table `classtime`
+-- Indexes for table `course`
 --
-ALTER TABLE `classtime`
+ALTER TABLE `course`
   ADD PRIMARY KEY (`CourseID`),
   ADD KEY `FacID` (`FacultyID`),
   ADD KEY `StuID_1` (`Student_1`),
@@ -171,6 +199,12 @@ ALTER TABLE `classtime`
 -- Indexes for table `faculty`
 --
 ALTER TABLE `faculty`
+  ADD PRIMARY KEY (`User_ID`);
+
+--
+-- Indexes for table `notice`
+--
+ALTER TABLE `notice`
   ADD PRIMARY KEY (`User_ID`);
 
 --
@@ -190,16 +224,22 @@ ALTER TABLE `stuff`
 --
 
 --
--- AUTO_INCREMENT for table `classtime`
+-- AUTO_INCREMENT for table `course`
 --
-ALTER TABLE `classtime`
-  MODIFY `CourseID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `course`
+  MODIFY `CourseID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2202;
 
 --
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
   MODIFY `User_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5020;
+
+--
+-- AUTO_INCREMENT for table `notice`
+--
+ALTER TABLE `notice`
+  MODIFY `User_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `student`
@@ -218,9 +258,9 @@ ALTER TABLE `stuff`
 --
 
 --
--- Constraints for table `classtime`
+-- Constraints for table `course`
 --
-ALTER TABLE `classtime`
+ALTER TABLE `course`
   ADD CONSTRAINT `FacID` FOREIGN KEY (`FacultyID`) REFERENCES `faculty` (`User_ID`),
   ADD CONSTRAINT `StuID_1` FOREIGN KEY (`Student_1`) REFERENCES `student` (`User_ID`),
   ADD CONSTRAINT `StuID_2` FOREIGN KEY (`Student_2`) REFERENCES `student` (`User_ID`),
